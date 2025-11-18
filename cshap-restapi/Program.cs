@@ -1,5 +1,5 @@
 
-namespace cshap_restapi
+namespace CShap.RestApi
 {
     public class Program
     {

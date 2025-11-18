@@ -1,7 +1,7 @@
 ﻿using CShap.RestApi.Entities;
 using System.Runtime.InteropServices;
 
-namespace cshap_restapi.ViewModels
+namespace CShap.RestApi.ViewModels
 {
     public class BillDto
     {

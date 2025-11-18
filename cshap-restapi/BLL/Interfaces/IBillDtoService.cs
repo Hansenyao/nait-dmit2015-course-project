@@ -1,6 +1,6 @@
-﻿using cshap_restapi.ViewModels;
+﻿using CShap.RestApi.ViewModels;
 
-namespace cshap_restapi.BLL.Interfaces
+namespace CShap.RestApi.BLL.Interfaces
 {
     public interface IBillDtoService
     {

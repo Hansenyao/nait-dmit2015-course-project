@@ -1,6 +1,6 @@
-﻿using cshap_restapi.BLL.Interfaces;
+﻿using CShap.RestApi.BLL.Interfaces;
 
-namespace cshap_restapi.BLL.Interfaces
+namespace CShap.RestApi.BLL.Interfaces
 {
     public class SResult<T>
     {

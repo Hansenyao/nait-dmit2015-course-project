@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <RootNamespace>cshap_restapi</RootNamespace>
+    <UserSecretsId>8e7627a6-c98a-4d15-b832-a1def276f7ad</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>

@@ -4,7 +4,7 @@ using CShap.RestApi.BLL.Interfaces;
 using CShap.RestApi.ViewModels;
 using Microsoft.EntityFrameworkCore;
 
-namespace cshap_restapi.BLL
+namespace CShap.RestApi.BLL
 {
     public class BillDtoService : IBillDtoService
     {

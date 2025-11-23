@@ -43,4 +43,6 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/pages/b
 # How to build
 - cd react-restclient
 - npm install
-- npm install @mui/material @emotion/react @emotion/styled
+- npm install @mui/material@latest @mui/icons-material@latest @emotion/react@latest @emotion/styled@latest
+- npm install @mui/x-data-grid
+

@@ -1,22 +1,23 @@
 import React, { useEffect, useState } from "react";
 import { Button, Box } from "@mui/material";
+import dynamic from "next/dynamic";
+
 import Header from "@/components/Header";
 import NavBar from "@/components/NavBar";
 import BillDialog from "@/components/BillDialog";
-import BillTable from "@/components/BillTable";
-import { getBills, createBill, updateBill, deleteBill } from "@/restclient/bill";
 import ErrorBanner from "@/components/MessageBanner";
 
-const TEST_BILLS = [
-    { billID: 1, payeeName: 'Ali', paymentDue: 35.2, paid: false },
-    { billID: 2, payeeName: 'PayPal', paymentDue: 42.9, paid: true },
-];
+import { getBills, createBill, updateBill, deleteBill } from "@/restclient/bill";
+
+// Import BillTable Dynamicly，disable SSR
+const BillTable = dynamic(() => import("@/components/BillTable"), { ssr: false });
 
 export default function Home() {
     const [dlgShow, setDlgShow] = useState(false);
     const [bills, setBills] = useState([]);
     const [selBill, setSelBill] = useState([]);
     const [messageStatus, setMessageStatus] = useState({ message: "", isError: false });
+
     const closeError = () => setMessageStatus({ message: "", isError: false });
 
     // load all bills
@@ -90,12 +91,7 @@ export default function Home() {
                     </Button>
                 </Box>
 
-                <BillDialog
-                    open={dlgShow}
-                    onClose={() => setDlgShow(false)}
-                    onSave={handleSaveBill}
-                    bill={selBill}
-                />
+                <BillDialog open={dlgShow} onClose={() => setDlgShow(false)} onSave={handleSaveBill} bill={selBill} />
                 <BillTable bills={bills} onEdit={handleEdit} onDelete={handleDelete} />
             </Box>
         </div>

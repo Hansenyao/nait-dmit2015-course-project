@@ -42,7 +42,12 @@ export default function BillTable({ bills, onEdit, onDelete }) {
 
   return (
     <div style={{ height: 500, width: "100%" }}>
-      <DataGrid rows={bills} columns={columns} getRowId={(row) => row.billID} pageSize={10} />
+      <DataGrid rows={bills} columns={columns} getRowId={(row) => row.billID} pageSize={10}
+        sx={{
+          "& .MuiDataGrid-columnHeaderTitle": {
+            fontWeight: "bold",
+          }
+        }} />
     </div>
   );
 }

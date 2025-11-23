@@ -43,14 +43,16 @@ export default function Home() {
     // save bill for add/edit
     const handleSaveBill = async (bill) => {
         try {
-            if (bill.billId > 0) {
+            if (bill.billID > 0) {
                 // update
-                await updateBill(bill.billId, bill);
-                setBills(bills.map((b) => (b.billId === bill.billId ? bill : b)));
+                await updateBill(bill.billID, bill);
+                setBills(bills.map((b) => (b.billID === bill.billID ? bill : b)));
+                setMessageStatus({ message: `Bill (ID: ${bill.billID}) has updated successfully`, isError: false });
             } else {
                 // add a new one
                 var newBill = await createBill(bill);
                 setBills([...bills, newBill]);
+                setMessageStatus({ message: `Bill (ID: ${newBill.billID}) has created successfully`, isError: false });
             }
         } catch (e) {
             setMessageStatus({ message: e.message, isError: true });
@@ -59,10 +61,10 @@ export default function Home() {
 
     // delete a bill
     const handleDelete = async (id) => {
-        console.log("id: ", id);
         try {
             await deleteBill(id);
             loadData();
+            setMessageStatus({ message: `Bill (ID: ${id}) has deleted successfully`, isError: false });
         } catch (e) {
             setMessageStatus({ message: e.message, isError: true });
         }

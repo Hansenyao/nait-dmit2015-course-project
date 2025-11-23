@@ -75,11 +75,8 @@ export const updateBill = async (id, bill) => {
         const resp = await fetch(`${BASE_URL}/${id}`, {
             method: "PUT",
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ bill })
+            body: JSON.stringify(bill)
         });
-        if (resp.ok) {
-            return await resp.json();
-        }
 
         // failed! Get error from JSON or fallback text
         let err;

@@ -19,7 +19,7 @@ export default function MessageBanner({ message, isError, onClose }) {
                     display: "flex",
                     justifyContent: "space-between",
                     alignItems: "center",
-                    backgroundColor: isError ? "#ff4d4f" : "#1976d2",
+                    backgroundColor: isError ? "#ff4d4f" : "#4caf50",
                     color: "white",
                     padding: "10px 15px",
                     marginBottom: "10px",

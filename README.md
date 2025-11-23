@@ -4,3 +4,23 @@
 ## Youfang Yao (Github Name: Hansenyao)
 
 Write your assignment discussion here with the status of your assignment, time to complete, any issues encountered, any key learning points, and any feedback on improving the assignment.
+
+## Technology Stacks (Frameworks)
+
+- Database: PostgresSQL
+
+- Backend: Controller-based REST API with ASP.NET Core
+
+- Frontend: React + Next.js
+
+## How to Use
+
+- Use bellow command to clone project code from github
+
+```
+    $ git clone https://github.com/DMIT-2015/dmit2015-1251-courseproject-Hansenyao.git
+```
+
+- For backend, please refer [backend instruction](./cshap-restapi/README.md)
+
+- For frontend, please refer [frontend instruction](./react-restclient/README.md)

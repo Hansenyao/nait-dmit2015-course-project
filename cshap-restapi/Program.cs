@@ -34,7 +34,23 @@ namespace CShap.RestApi
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            // Add CORS policy
+            const string CORS_POLICY_NAME = "allow_all";
+            builder.Services.AddCors(options =>
+            {
+                options.AddPolicy(name: CORS_POLICY_NAME,
+                policy =>
+                {
+                    policy.AllowAnyOrigin()
+                    .AllowAnyMethod()
+                    .AllowAnyHeader();
+                });
+            });
+
             var app = builder.Build();
+
+            // Enable CORS
+            app.UseCors(CORS_POLICY_NAME);
 
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())

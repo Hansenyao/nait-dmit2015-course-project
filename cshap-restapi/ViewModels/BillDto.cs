@@ -9,7 +9,7 @@ namespace CShap.RestApi.ViewModels
         public string PayeeName { get; set; } = string.Empty;
         public double PaymentDue {  get; set; }
         public bool Paid { get; set; }
-        public DateTime CreatedAt { get; set; }
-        public DateTime UpdatedAt { get; set; }
+        public DateTime? CreatedAt { get; set; }
+        public DateTime? UpdatedAt { get; set; }
     }
 }

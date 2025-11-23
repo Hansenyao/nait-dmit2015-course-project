@@ -46,4 +46,5 @@ Check out our [Next.js deployment documentation](https://nextjs.org/docs/pages/b
 - npm install @mui/material@latest @mui/icons-material@latest @emotion/react@latest @emotion/styled@latest
 - npm install @mui/x-data-grid
 - npm install --save @mui/x-data-grid
+- npm install @faker-js/faker
 

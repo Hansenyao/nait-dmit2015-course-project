@@ -1,25 +1,25 @@
 import React, { useEffect } from "react";
 
-export default function ErrorBanner({ error, onClose }) {
+export default function MessageBanner({ message, isError, onClose }) {
     useEffect(() => {
-        if (error) {
+        if (message) {
             const timer = setTimeout(() => {
                 onClose();
             }, 5000);
             return () => clearTimeout(timer)
         }
-    }, [error, onClose]);
+    }, [message, onClose]);
 
-    if (!error) return null;
+    if (!message) return null;
 
     return (
         <div>
-            {error && (
+            {message && (
                 <div style={{
                     display: "flex",
                     justifyContent: "space-between",
                     alignItems: "center",
-                    backgroundColor: "#ff4d4f",
+                    backgroundColor: isError ? "#ff4d4f" : "#1976d2",
                     color: "white",
                     padding: "10px 15px",
                     marginBottom: "10px",
@@ -27,7 +27,7 @@ export default function ErrorBanner({ error, onClose }) {
                     fontWeight: "bold",
                     boxSizing: "border-box"
                 }}>
-                    {error}
+                    {message}
 
                     <button
                         onClick={onClose}

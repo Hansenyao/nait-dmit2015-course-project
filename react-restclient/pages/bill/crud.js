@@ -5,7 +5,7 @@ import NavBar from "@/components/NavBar";
 import BillDialog from "@/components/BillDialog";
 import BillTable from "@/components/BillTable";
 import { getBills, createBill, updateBill, deleteBill } from "@/restclient/bill";
-import ErrorBanner from "@/components/ErrorBanner";
+import ErrorBanner from "@/components/MessageBanner";
 
 const TEST_BILLS = [
     { billID: 1, payeeName: 'Ali', paymentDue: 35.2, paid: false },
@@ -16,8 +16,8 @@ export default function Home() {
     const [dlgShow, setDlgShow] = useState(false);
     const [bills, setBills] = useState([]);
     const [selBill, setSelBill] = useState([]);
-    const [errorMessage, setErrorMessage] = useState("");
-    const closeError = () => setErrorMessage("");
+    const [messageStatus, setMessageStatus] = useState({ message: "", isError: false });
+    const closeError = () => setMessageStatus({ message: "", isError: false });
 
     // load all bills
     const loadData = () => {
@@ -26,7 +26,7 @@ export default function Home() {
                 setBills(res)
             });
         } catch (e) {
-            setErrorMessage(e.message);
+            setMessageStatus({ message: e.message, isError: true });
         }
     };
 
@@ -49,21 +49,22 @@ export default function Home() {
                 setBills(bills.map((b) => (b.billId === bill.billId ? bill : b)));
             } else {
                 // add a new one
-                await createBill(bill);
-                setBills([...bills, bill]);
+                var newBill = await createBill(bill);
+                setBills([...bills, newBill]);
             }
         } catch (e) {
-            setErrorMessage(e.message);
+            setMessageStatus({ message: e.message, isError: true });
         }
     };
 
     // delete a bill
     const handleDelete = async (id) => {
+        console.log("id: ", id);
         try {
             await deleteBill(id);
             loadData();
         } catch (e) {
-            setErrorMessage(e.message);
+            setMessageStatus({ message: e.message, isError: true });
         }
     };
 
@@ -75,7 +76,7 @@ export default function Home() {
                 <h1>DMIT2015 - Course Project | CRUD</h1>
             </Box>
             <Box sx={{ padding: 3 }}>
-                <ErrorBanner error={errorMessage} onClose={closeError} />
+                <ErrorBanner message={messageStatus.message} isError={messageStatus.isError} onClose={closeError} />
 
                 <Box sx={{ mb: 2 }}>
                     <Button variant="contained" onClick={() => {

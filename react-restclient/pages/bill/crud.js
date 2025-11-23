@@ -55,7 +55,9 @@ export default function Home() {
         <div>
             <Header />
             <NavBar />
-            <h1>DMIT2015 - Course Project | CRUD</h1>
+            <Box sx={{ flexGrow: 1, ml: 3, mt: 2 }}>
+                <h1>DMIT2015 - Course Project | CRUD</h1>
+            </Box>
 
             <Box sx={{ padding: 3 }}>
                 <Box sx={{ mb: 2 }}>

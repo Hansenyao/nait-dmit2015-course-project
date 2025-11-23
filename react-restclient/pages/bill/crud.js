@@ -13,9 +13,8 @@ import { getBills, createBill, updateBill, deleteBill } from "@/restclient/bill"
 const BillTable = dynamic(() => import("@/components/BillTable"), { ssr: false });
 
 export default function Home() {
-    const [dlgShow, setDlgShow] = useState(false);
     const [bills, setBills] = useState([]);
-    const [selBill, setSelBill] = useState([]);
+    const [dlgStatus, setDlgStatus] = useState({ selBill: null, open: false });
     const [messageStatus, setMessageStatus] = useState({ message: "", isError: false });
 
     const closeError = () => setMessageStatus({ message: "", isError: false });
@@ -37,8 +36,7 @@ export default function Home() {
 
     // edit the selected bill
     const handleEdit = (bill) => {
-        setSelBill(bill);
-        setDlgShow(true)
+        setDlgStatus({ selBill: bill, open: true })
     }
 
     // save bill for add/edit
@@ -82,16 +80,15 @@ export default function Home() {
                 <ErrorBanner message={messageStatus.message} isError={messageStatus.isError} onClose={closeError} />
 
                 <Box sx={{ mb: 2 }}>
-                    <Button variant="contained" onClick={() => {
-                        setSelBill(null)
-                        setDlgShow(true)
-                    }}
-                    >
+                    <Button variant="contained" onClick={() => { setDlgStatus({ selBill: null, open: true }) }} >
                         New Bill
                     </Button>
                 </Box>
 
-                <BillDialog open={dlgShow} onClose={() => setDlgShow(false)} onSave={handleSaveBill} bill={selBill} />
+                <BillDialog open={dlgStatus.open} onClose={() =>
+                    setDlgStatus({ selBill: null, open: false })}
+                    onSave={handleSaveBill} bill={dlgStatus.selBill}
+                />
                 <BillTable bills={bills} onEdit={handleEdit} onDelete={handleDelete} />
             </Box>
         </div>

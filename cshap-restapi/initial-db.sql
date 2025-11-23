@@ -13,3 +13,10 @@ CREATE TABLE Bills (
     CreatedAt TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     UpdatedAt TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
+
+INSERT INTO Bills (PayeeName, PaymentDue, Paid)
+VALUES
+('Apple Pay', 100.20, false),
+('AliPay', 98.5, true),
+('Paypal', 43.8, false),
+('Amzon', 200.20, true);

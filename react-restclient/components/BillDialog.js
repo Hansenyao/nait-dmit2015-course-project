@@ -2,13 +2,21 @@ import * as React from "react";
 import { Checkbox, FormControlLabel } from "@mui/material";
 import { Dialog, DialogTitle, DialogContent, DialogActions, TextField, Button } from "@mui/material";
 
-export default function BillDialog({ open, onClose, onSave }) {
+export default function BillDialog({ open, onClose, onSave, bill: initialBill }) {
     const [bill, setBill] = React.useState({
         payeeName: "",
         paymentDue: "",
         paid: false
     });
 
+    React.useEffect(() => {
+        if (initialBill) {
+            setBill(initialBill);
+        } else {
+            setBill({ billId: 0, payeeName: "", paymentDue: "", paid: false });
+        }
+    }, [initialBill]);
+  
     const handleChange = (e) => {
         setBill({ ...bill, [e.target.name]: e.target.value });
     };

@@ -1,11 +1,8 @@
 import * as React from "react";
 import { DataGrid } from "@mui/x-data-grid";
 import { Button } from "@mui/material";
-//import { useNavigate } from "react-router-dom";
 
-export default function BillTable({ bills, onDelete }) {
-  //const navigate = useNavigate();
-
+export default function BillTable({ bills, onEdit, onDelete }) {
   const columns = [
     { field: "billId", headerName: "ID", width: 80 },
     { field: "payeeName", headerName: "Payee", width: 200 },
@@ -24,7 +21,7 @@ export default function BillTable({ bills, onDelete }) {
             variant="outlined"
             size="small"
             sx={{ mr: 1 }}
-            //onClick={}
+            onClick={() => onEdit(params.row)}
           >
             Edit
           </Button>

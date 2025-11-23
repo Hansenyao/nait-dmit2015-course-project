@@ -4,6 +4,7 @@ import Header from "@/components/Header";
 import NavBar from "@/components/NavBar";
 import BillDialog from "@/components/BillDialog";
 import BillTable from "@/components/BillTable";
+import { getBills, createBill, updateBill, deleteBill } from "@/restclient/bill";
 
 const TEST_BILLS = [
   { billId: 1, payeeName: 'Ali', paymentDue: 35.2, paid: false },
@@ -11,9 +12,11 @@ const TEST_BILLS = [
 ];
 
 export default function Home() {
-    const [open, setOpen] = useState(false);
+    const [dlgShow, setDlgShow] = useState(false);
     const [bills, setBills] = useState([]);
+    const [selBill, setSelBill] = useState([]);
 
+    // load all bills
     const loadData = () => {
         //getBills().then((res) => setBills(res.data));
         setBills(TEST_BILLS);
@@ -23,14 +26,26 @@ export default function Home() {
         loadData();
     }, []);
 
-    const handleSaveBill = (bill) => {
-        console.log("Saved bill:", bill);
-        // TODO: Add / Update bill to backend
+    // edit the selected bill
+    const handleEdit = (bill) => {
+        setSelBill(bill);
+        setDlgShow(true)
+    } 
 
-        // Update in local
-        setBills([...bills, bill]);
+    // save bill for add/edit
+    const handleSaveBill = async (bill) => {
+        if (bill.billId > 0) {
+            // update
+            await updateBill(bill.billId, bill);
+            setBills(bills.map((b) => (b.billId === bill.billId ? bill : b)));
+        } else {
+            // add a new one
+            await createBill(bill);
+            setBills([...bills, bill]);
+        }
     };
 
+    // delete a bill
     const handleDelete = async (id) => {
         await deleteBill(id);
         loadData();
@@ -44,17 +59,22 @@ export default function Home() {
 
             <Box sx={{ padding: 3 }}>
                 <Box sx={{ mb: 2 }}>
-                    <Button variant="contained" onClick={() => setOpen(true)}>
+                    <Button variant="contained" onClick={() => {
+                        setSelBill(null)
+                        setDlgShow(true)
+                    }}
+                    >
                     New Bill
                     </Button>
                 </Box>
 
                 <BillDialog
-                    open={open}
-                    onClose={() => setOpen(false)}
+                    open={dlgShow}
+                    onClose={() => setDlgShow(false)}
                     onSave={handleSaveBill}
+                    bill={selBill}
                 />
-                <BillTable bills={bills} onDelete={handleDelete} />
+                <BillTable bills={bills} onEdit={handleEdit} onDelete={handleDelete} />
             </Box>
         </div>
     );

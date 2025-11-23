@@ -4,7 +4,7 @@ import { Button } from "@mui/material";
 
 export default function BillTable({ bills, onEdit, onDelete }) {
   const columns = [
-    { field: "billId", headerName: "ID", width: 80 },
+    { field: "billID", headerName: "ID", width: 80 },
     { field: "payeeName", headerName: "Payee", width: 200 },
     { field: "paymentDue", headerName: "Payment Due", width: 130, type: "number" },
     { field: "paid", headerName: "Paid", width: 130, type: "bool" },
@@ -41,7 +41,7 @@ export default function BillTable({ bills, onEdit, onDelete }) {
 
   return (
     <div style={{ height: 500, width: "100%" }}>
-      <DataGrid rows={bills} columns={columns} getRowId={(row) => row.billId} pageSize={10} />
+      <DataGrid rows={bills} columns={columns} getRowId={(row) => row.billID} pageSize={10} />
     </div>
   );
 }

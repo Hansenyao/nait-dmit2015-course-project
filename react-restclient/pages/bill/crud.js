@@ -7,8 +7,8 @@ import BillTable from "@/components/BillTable";
 import { getBills, createBill, updateBill, deleteBill } from "@/restclient/bill";
 
 const TEST_BILLS = [
-  { billId: 1, payeeName: 'Ali', paymentDue: 35.2, paid: false },
-  { billId: 2, payeeName: 'PayPal', paymentDue: 42.9, paid: true },
+    { billID: 1, payeeName: 'Ali', paymentDue: 35.2, paid: false },
+    { billID: 2, payeeName: 'PayPal', paymentDue: 42.9, paid: true },
 ];
 
 export default function Home() {
@@ -18,8 +18,9 @@ export default function Home() {
 
     // load all bills
     const loadData = () => {
-        //getBills().then((res) => setBills(res.data));
-        setBills(TEST_BILLS);
+        getBills().then((res) => {
+            setBills(res)
+        });
     };
 
     useEffect(() => {
@@ -30,7 +31,7 @@ export default function Home() {
     const handleEdit = (bill) => {
         setSelBill(bill);
         setDlgShow(true)
-    } 
+    }
 
     // save bill for add/edit
     const handleSaveBill = async (bill) => {
@@ -66,7 +67,7 @@ export default function Home() {
                         setDlgShow(true)
                     }}
                     >
-                    New Bill
+                        New Bill
                     </Button>
                 </Box>
 

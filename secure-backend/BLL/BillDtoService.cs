@@ -1,7 +1,8 @@
-﻿using CShap.RestApi.DAL;
+﻿using CShap.RestApi.BLL.Interfaces;
+using CShap.RestApi.DAL;
 using CShap.RestApi.Entities;
-using CShap.RestApi.BLL.Interfaces;
 using CShap.RestApi.ViewModels;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.EntityFrameworkCore;
 
 namespace CShap.RestApi.BLL
@@ -9,6 +10,32 @@ namespace CShap.RestApi.BLL
     public class BillDtoService : IBillDtoService
     {
         private readonly AppDbContext _context;
+
+        #region Map Entity to View
+        private static BillDto MapToView(bill entity)
+        {
+            return new BillDto
+            {
+                BillID = entity.billid,
+                PayeeName = entity.payeename,
+                PaymentDue = entity.paymentdue,
+                Paid = entity.paid,
+                CreatedBy = entity.createdby,
+                CreatedAt = entity.createdat,
+                UpdatedAt = entity.updatedat
+            };
+        }
+        #endregion
+
+        #region Map View to Entity
+        private static void MapToEntity(BillDto view, ref bill entity)
+        {
+            entity.payeename = view.PayeeName;
+            entity.paymentdue = view.PaymentDue;
+            entity.paid = view.Paid;
+            entity.createdby = view.CreatedBy;
+        }
+        #endregion
 
         public BillDtoService(AppDbContext context)
         {
@@ -21,19 +48,31 @@ namespace CShap.RestApi.BLL
             try
             {
                 var billDtos = await _context.bills
-                    .Select(b => new BillDto
-                    {
-                        BillID = b.billid,
-                        PayeeName = b.payeename,
-                        PaymentDue = b.paymentdue,
-                        Paid = b.paid,
-                        CreatedAt = b.createdat,
-                        UpdatedAt = b.updatedat
-                    })
-                    .OrderBy(x => x.CreatedAt)
+                    .OrderBy(b => b.createdat)
+                    .Select(b => MapToView(b))
                     .ToListAsync();
                 if (billDtos == null || billDtos.Count == 0)
                     return SResult<List<BillDto>>.Fail("No any bills was found");
+
+                return SResult<List<BillDto>>.Ok(billDtos);
+            }
+            catch (Exception ex)
+            {
+                return SResult<List<BillDto>>.Fail(ex.Message);
+            }
+        }
+
+        public async Task<SResult<List<BillDto>>> GetByNameAsync(string name)
+        {
+            try
+            {
+                var billDtos = await _context.bills
+                    .OrderBy(b => b.createdat)
+                    .Where(b => b.createdby == name)
+                    .Select(b => MapToView(b))
+                    .ToListAsync();
+                if (billDtos == null || billDtos.Count == 0)
+                    return SResult<List<BillDto>>.Fail($"No any bills was found with Name: {name}");
 
                 return SResult<List<BillDto>>.Ok(billDtos);
             }
@@ -49,19 +88,29 @@ namespace CShap.RestApi.BLL
             {
                 var billDto = await _context.bills
                     .Where(b => b.billid == id)
-                    .Select(b => new BillDto
-                    {
-                        BillID = b.billid,
-                        PayeeName = b.payeename,
-                        PaymentDue = b.paymentdue,
-                        Paid = b.paid,
-                        CreatedAt = b.createdat,
-                        UpdatedAt = b.updatedat
-                    })
-                    .OrderBy(x => x.CreatedAt)
+                    .Select(b => MapToView(b))
                     .FirstOrDefaultAsync();
                 if (billDto == null)
                     return SResult<BillDto>.Fail($"No any bill was found with ID: {id}");
+
+                return SResult<BillDto>.Ok(billDto);
+            }
+            catch (Exception ex)
+            {
+                return SResult<BillDto>.Fail(ex.Message);
+            }
+        }
+
+        public async Task<SResult<BillDto>> GetByIdAndNameAsync(int id, string name)
+        {
+            try
+            {
+                var billDto = await _context.bills
+                    .Where(b => b.billid == id && b.createdby == name)
+                    .Select(b => MapToView(b))
+                    .FirstOrDefaultAsync();
+                if (billDto == null)
+                    return SResult<BillDto>.Fail($"No any bill was found with ID: {id} and Name: {name}");
 
                 return SResult<BillDto>.Ok(billDto);
             }
@@ -75,16 +124,12 @@ namespace CShap.RestApi.BLL
         {
             try
             {
-                var now = DateTime.UtcNow;
+                bill billEntity = new bill();
+                MapToEntity(dto, ref billEntity);
 
-                var billEntity = new bill
-                {
-                    payeename = dto.PayeeName,
-                    paymentdue = dto.PaymentDue,
-                    paid = dto.Paid,
-                    createdat = now,
-                    updatedat = now
-                };
+                var now = DateTime.UtcNow;
+                billEntity.createdat = now;
+                billEntity.updatedat = now;
 
                 _context.bills.Add(billEntity);
                 await _context.SaveChangesAsync();
@@ -112,9 +157,7 @@ namespace CShap.RestApi.BLL
                 if (billEntity == null)
                     return SResult.Fail($"No any bill was found with ID: {id}");
 
-                billEntity.payeename = dto.PayeeName;
-                billEntity.paymentdue = dto.PaymentDue;
-                billEntity.paid = dto.Paid;
+                MapToEntity(dto, ref billEntity);
                 billEntity.updatedat = DateTime.UtcNow;
 
                 await _context.SaveChangesAsync();

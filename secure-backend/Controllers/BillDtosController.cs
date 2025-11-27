@@ -14,8 +14,8 @@ namespace CShap.RestApi.Controllers
     {
         private readonly IBillDtoService _billDtoService;
 
-        private string GetUserName => User.Claims.FirstOrDefault(c => c.Type == "name")?.Value ?? "";
-        private string GetUserRole => User.FindFirst(ClaimTypes.Role)?.Value ?? "";
+        private string UserName => User.Claims.FirstOrDefault(c => c.Type == "name")?.Value ?? "";
+        private string Role => User.FindFirst(ClaimTypes.Role)?.Value ?? "";
 
         public BillDtosController(IBillDtoService billDtoService)
         {
@@ -27,7 +27,11 @@ namespace CShap.RestApi.Controllers
         [Authorize]
         public async Task<IActionResult> GetAll()
         {
-            var result = await _billDtoService.GetAllAsync();
+            // Accounting return all items
+            // ActiveStudent can only return personal items
+            var result = (Role == Roles.Accounting) 
+                       ? await _billDtoService.GetAllAsync()
+                       : await _billDtoService.GetByNameAsync(UserName);
             if (!result.Success) 
                 return NotFound(result.Message);
             return Ok(result.Data);
@@ -37,7 +41,8 @@ namespace CShap.RestApi.Controllers
         [Authorize(Roles = Roles.ActiveStudent)]
         public async Task<IActionResult> GetById(int id)
         {
-            var result = await _billDtoService.GetByIdAsync(id);
+            // ActiveStudent can only return personal item
+            var result = await _billDtoService.GetByIdAndNameAsync(id, UserName);
             if (!result.Success)
                 return NotFound(result.Message);
             return Ok(result.Data);
@@ -47,6 +52,9 @@ namespace CShap.RestApi.Controllers
         [Authorize(Roles = Roles.ActiveStudent)]
         public async Task<IActionResult> Create(BillDto dto)
         {
+            // Set current user to view model
+            dto.CreatedBy = UserName;
+
             var result = await _billDtoService.CreateAsync(dto);
             if (!result.Success)
                 return BadRequest(result.Message);
@@ -60,6 +68,10 @@ namespace CShap.RestApi.Controllers
             if (id != dto.BillID)
                 return BadRequest("ID is not matching");
 
+            // ActiveStudent can only update personal items
+            if (UserName != dto.CreatedBy)
+                return Forbid("No Permission");
+
             var result = await _billDtoService.UpdateAsync(id, dto);
             if (!result.Success)
                 return BadRequest(result.Message);
@@ -70,9 +82,14 @@ namespace CShap.RestApi.Controllers
         [Authorize(Roles = Roles.ActiveStudent)]
         public async Task<IActionResult> Delete(int id)
         {
-            var result = await _billDtoService.DeleteAsync(id);
-            if (!result.Success)
-                return BadRequest(result.Message);
+            // ActiveStudent can only delete personal items
+            var findResult = await _billDtoService.GetByIdAndNameAsync(id, UserName);
+            if (!findResult.Success)
+                return Forbid("No Permission");
+
+            var deleteResult = await _billDtoService.DeleteAsync(id);
+            if (!deleteResult.Success)
+                return BadRequest(deleteResult.Message);
             return NoContent();
         }
     }

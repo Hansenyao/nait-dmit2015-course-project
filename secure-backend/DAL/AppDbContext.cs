@@ -23,6 +23,7 @@ public partial class AppDbContext : DbContext
             entity.HasKey(e => e.billid).HasName("bills_pkey");
 
             entity.Property(e => e.createdat).HasDefaultValueSql("now()");
+            entity.Property(e => e.createdby).HasMaxLength(50);
             entity.Property(e => e.payeename)
                 .IsRequired()
                 .HasMaxLength(20);

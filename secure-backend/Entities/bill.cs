@@ -18,4 +18,6 @@ public partial class bill
     public DateTime createdat { get; set; }
 
     public DateTime updatedat { get; set; }
+
+    public string createdby { get; set; }
 }

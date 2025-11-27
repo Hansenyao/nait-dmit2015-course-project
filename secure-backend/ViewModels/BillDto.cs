@@ -13,6 +13,7 @@ namespace CShap.RestApi.ViewModels
         [Range(0.01, double.MaxValue, ErrorMessage = "PaymentDue must be greater than 0")]
         public double PaymentDue {  get; set; } = default!;
         public bool Paid { get; set; }
+        public string CreatedBy { get; set; } = string.Empty;
         public DateTime? CreatedAt { get; set; }
         public DateTime? UpdatedAt { get; set; }
     }

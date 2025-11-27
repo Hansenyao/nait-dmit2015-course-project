@@ -1,0 +1,35 @@
+@cshap_restapi_HostAddress = http://localhost:5281
+
+GET {{cshap_restapi_HostAddress}}/restapi/BillDtos
+Accept: application/json
+
+###
+POST {{cshap_restapi_HostAddress}}/restapi/BillDtos
+Accept: application/json
+Content-Type: application/json
+
+{
+  "payeeName":"Appy Pay",
+  "paymentDue": 100.10,
+  "paid": false
+}
+
+###
+GET {{cshap_restapi_HostAddress}}/restapi/BillDtos/5
+Accept: application/json
+
+###
+PUT {{cshap_restapi_HostAddress}}/restapi/BillDtos/5
+Accept: application/json
+Content-Type: application/json
+
+{
+  "billID": 5,
+  "payeeName":"Appy Pay",
+  "paymentDue": 50,
+  "paid": true
+}
+
+###
+DELETE {{cshap_restapi_HostAddress}}/restapi/BillDtos/5
+Accept: application/json

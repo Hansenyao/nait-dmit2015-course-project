@@ -1,8 +1,11 @@
 
-using CShap.RestApi.BLL.Interfaces;
 using CShap.RestApi.BLL;
+using CShap.RestApi.BLL.Interfaces;
 using CShap.RestApi.DAL;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.Security.Claims;
 
 namespace CShap.RestApi
 {
@@ -46,6 +49,11 @@ namespace CShap.RestApi
                     .AllowAnyHeader();
                 });
             });
+
+            // Configure JWT authentication
+            const string authIssueer = "https://stirred-urchin-27.clerk.accounts.dev";
+            const string authAudience = "dmit2015-jwt";
+            ConfigureAuthority(builder, authIssueer, authAudience);
 
             var app = builder.Build();
 
@@ -112,6 +120,48 @@ namespace CShap.RestApi
                     }
                 });
             });
+        }
+        // Configure JWT for Clerk
+        private static void ConfigureAuthority(WebApplicationBuilder builder, String authIssuer, String authAudience)
+        {
+            // Set authority to JWT
+            builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+                .AddJwtBearer(options =>
+                {
+                    options.Authority = authIssuer;
+                    options.Audience = authAudience;
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true
+                    };
+                    options.Events = new JwtBearerEvents
+                    {
+                        // Add role to token
+                        OnTokenValidated = context =>
+                        {
+                            var claimsIdentity = context.Principal.Identity as ClaimsIdentity;
+                            var roleClaim = claimsIdentity?.FindFirst("role");
+                            if (roleClaim != null)
+                            {
+                                claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, roleClaim.Value));
+                            }
+                            return Task.CompletedTask;
+                        },
+
+                        // Failed
+                        OnAuthenticationFailed = ctx =>
+                        {
+                            Console.WriteLine("Token invalid: " + ctx.Exception.Message);
+                            Console.WriteLine("InnerException: " + ctx.Exception.InnerException?.Message);
+                            return Task.CompletedTask;
+                        }
+                    };
+                });
+
+            builder.Services.AddAuthorization();
         }
     }
 }

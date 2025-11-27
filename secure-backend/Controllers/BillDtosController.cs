@@ -3,6 +3,8 @@ using CShap.RestApi.ViewModels;
 using cshap_restapi.Constants;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Linq;
+using System.Security.Claims;
 
 namespace CShap.RestApi.Controllers
 {
@@ -11,6 +13,9 @@ namespace CShap.RestApi.Controllers
     public class BillDtosController : Controller
     {
         private readonly IBillDtoService _billDtoService;
+
+        private string GetUserName => User.Claims.FirstOrDefault(c => c.Type == "name")?.Value ?? "";
+        private string GetUserRole => User.FindFirst(ClaimTypes.Role)?.Value ?? "";
 
         public BillDtosController(IBillDtoService billDtoService)
         {

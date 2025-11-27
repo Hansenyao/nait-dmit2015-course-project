@@ -135,22 +135,10 @@ namespace CShap.RestApi
                         ValidateIssuer = true,
                         ValidateAudience = true,
                         ValidateLifetime = true,
-                        ValidateIssuerSigningKey = true
+                        ValidateIssuerSigningKey = true,
                     };
                     options.Events = new JwtBearerEvents
                     {
-                        // Add role to token
-                        OnTokenValidated = context =>
-                        {
-                            var claimsIdentity = context.Principal.Identity as ClaimsIdentity;
-                            var roleClaim = claimsIdentity?.FindFirst("role");
-                            if (roleClaim != null)
-                            {
-                                claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, roleClaim.Value));
-                            }
-                            return Task.CompletedTask;
-                        },
-
                         // Failed
                         OnAuthenticationFailed = ctx =>
                         {

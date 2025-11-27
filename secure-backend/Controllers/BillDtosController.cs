@@ -1,5 +1,7 @@
 ﻿using CShap.RestApi.BLL.Interfaces;
 using CShap.RestApi.ViewModels;
+using cshap_restapi.Constants;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CShap.RestApi.Controllers
@@ -17,6 +19,7 @@ namespace CShap.RestApi.Controllers
         }
 
         [HttpGet]
+        [Authorize]
         public async Task<IActionResult> GetAll()
         {
             var result = await _billDtoService.GetAllAsync();
@@ -26,6 +29,7 @@ namespace CShap.RestApi.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = Roles.ActiveStudent)]
         public async Task<IActionResult> GetById(int id)
         {
             var result = await _billDtoService.GetByIdAsync(id);
@@ -35,6 +39,7 @@ namespace CShap.RestApi.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = Roles.ActiveStudent)]
         public async Task<IActionResult> Create(BillDto dto)
         {
             var result = await _billDtoService.CreateAsync(dto);
@@ -44,6 +49,7 @@ namespace CShap.RestApi.Controllers
         }
 
         [HttpPut("{id}")]
+        [Authorize(Roles = Roles.ActiveStudent)]
         public async Task<IActionResult> Update(int id, BillDto dto)
         {
             if (id != dto.BillID)
@@ -56,6 +62,7 @@ namespace CShap.RestApi.Controllers
         }
 
         [HttpDelete("{id}")]
+        [Authorize(Roles = Roles.ActiveStudent)]
         public async Task<IActionResult> Delete(int id)
         {
             var result = await _billDtoService.DeleteAsync(id);

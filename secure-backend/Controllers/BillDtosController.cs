@@ -3,7 +3,6 @@ using CShap.RestApi.ViewModels;
 using cshap_restapi.Constants;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Linq;
 using System.Security.Claims;
 
 namespace CShap.RestApi.Controllers

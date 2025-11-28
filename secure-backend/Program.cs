@@ -2,12 +2,9 @@
 using CShap.RestApi.BLL;
 using CShap.RestApi.BLL.Interfaces;
 using CShap.RestApi.DAL;
-using cshap_restapi.BLL;
-using cshap_restapi.BLL.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
-using System.Security.Claims;
 
 namespace CShap.RestApi
 {
@@ -32,8 +29,6 @@ namespace CShap.RestApi
             });
 
             // Register service interface
-            builder.Services.AddHttpClient();
-            builder.Services.AddScoped<IAuthService, AuthService>();
             builder.Services.AddScoped<IBillDtoService, BillDtoService>();
 
             builder.Services.AddControllers();

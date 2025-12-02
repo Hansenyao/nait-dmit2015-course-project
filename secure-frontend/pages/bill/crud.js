@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Button, Box } from "@mui/material";
+import { useUser } from "@clerk/nextjs";
+import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
 
 import Header from "@/components/Header";
@@ -16,6 +18,8 @@ export default function Home() {
     const [bills, setBills] = useState([]);
     const [dlgStatus, setDlgStatus] = useState({ selBill: null, open: false });
     const [messageStatus, setMessageStatus] = useState({ message: "", isError: false });
+    const { isSignedIn, user } = useUser();
+    const router = useRouter();
 
     const closeError = () => setMessageStatus({ message: "", isError: false });
 
@@ -31,8 +35,15 @@ export default function Home() {
     };
 
     useEffect(() => {
-        loadData();
-    }, []);
+        if (!isSignedIn) {
+            // redirect login page
+            router.replace(`/auth/login?redirect_url=${encodeURIComponent(router.asPath)}`);
+        } else {
+            loadData();
+        }
+    }, [isSignedIn, router]);
+
+    if (!isSignedIn) return null;
 
     // edit the selected bill
     const handleEdit = (bill) => {

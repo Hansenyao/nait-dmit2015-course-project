@@ -1,10 +1,14 @@
 import { Box } from "@mui/material";
 import { SignIn } from "@clerk/nextjs";
+import { useRouter } from "next/router";
 
 import Header from "@/components/Header";
 import NavBar from "@/components/NavBar";
 
 export default function Home() {
+    const router = useRouter();
+    const redirectUrl = router.query.redirect_url || "/bill/crud";
+
     return (
         <div>
             <Header />
@@ -15,7 +19,7 @@ export default function Home() {
 
             <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", mt: 4, mb: 4 }}>
                 <Box sx={{ width: 400 }}>
-                    <SignIn routing="hash" />
+                    <SignIn routing="hash" afterSignInUrl={redirectUrl} />
                 </Box>
             </Box>
         </div>

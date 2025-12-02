@@ -21,8 +21,7 @@ export default function Home() {
                 <Box sx={{ width: 400 }}>
                     <SignIn routing="hash"
                         afterSignInUrl={redirectUrl}
-                        afterSignOutUrl="/"
-                        options={{ rememberDevice: true }} />
+                        afterSignOutUrl="/" />
                 </Box>
             </Box>
         </div>

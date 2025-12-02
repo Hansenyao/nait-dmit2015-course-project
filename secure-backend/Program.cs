@@ -50,7 +50,7 @@ namespace CShap.RestApi
             });
 
             // Configure JWT authentication
-            const string authIssueer = "https://stirred-urchin-27.clerk.accounts.dev";
+            const string authIssueer = "https://mint-cobra-4.clerk.accounts.dev";
             const string authAudience = "dmit2015-jwt";
             ConfigureAuthority(builder, authIssueer, authAudience);
 

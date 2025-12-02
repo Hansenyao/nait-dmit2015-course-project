@@ -66,3 +66,33 @@ This instruction descripts how to build, test, and run frontend application for 
 - On this page, we can do CRUD operations for Bill management.
 
 - Good Luck!
+
+
+# DMIT2015 Course Project Part 2 - Frontend Instruction
+
+Please make sure file .env.local exists and its content as below:
+
+```
+# Clerk APIs for test only!
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=pk_test_bWludC1jb2JyYS00LmNsZXJrLmFjY291bnRzLmRldiQ
+CLERK_SECRET_KEY=sk_test_WNr3F6N8lb6aEzR4h7r3qFJtr1NdfDjoJ7YtOkX9mi
+```
+
+And the build and test steps are same as part 1.
+
+## Accounts for test
+
+You can use below accounts to test
+
+### ActiveStudent
+
+- Username: yyao1, Password: Dmit2015-password 
+- Username: ytao1, Password: Dmit2015-password 
+
+### Accounting
+
+- Username: fyang1, Password: Dmit2015-password
+
+### Shipping
+
+- Username: ysing1, Password: Dmit2015-password

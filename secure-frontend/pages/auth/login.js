@@ -1,5 +1,5 @@
 import { Box } from "@mui/material";
-import { SignIn } from "@clerk/nextjs";
+import { SignIn, ClerkLoaded } from "@clerk/nextjs";
 import { useRouter } from "next/router";
 
 import Header from "@/components/Header";
@@ -19,9 +19,19 @@ export default function Home() {
 
             <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", mt: 4, mb: 4 }}>
                 <Box sx={{ width: 400 }}>
-                    <SignIn routing="hash"
-                        afterSignInUrl={redirectUrl}
-                        afterSignOutUrl="/" />
+                    <ClerkLoaded>
+                        <SignIn routing="hash"
+                            afterSignInUrl={redirectUrl}
+                            afterSignOutUrl="/"
+                            appearance={{
+                                elements: {
+                                    footerAction: {
+                                        display: 'none',
+                                    },
+                                },
+                            }}
+                        />
+                    </ClerkLoaded>
                 </Box>
             </Box>
         </div>

@@ -1,10 +1,10 @@
-import { AppBar, Toolbar, Typography, Box, Link, IconButton, Menu, MenuItem } from "@mui/material";
+import { AppBar, Toolbar, Typography, Box, Link } from "@mui/material";
 import { UserButton, SignedIn, SignedOut, useUser } from "@clerk/nextjs";
 
 export default function NavBar() {
   const { user } = useUser();
+  const name = user?.firstName ?? user?.primaryEmailAddress?.emailAddress;
   const role = user?.publicMetadata?.role ?? "User";
-  console.log("role: ", role);
 
   return <Box sx={{ flexGrow: 1 }}>
     <AppBar position="static">
@@ -26,8 +26,7 @@ export default function NavBar() {
         {/* Signed in：Display username + role */}
         <SignedIn>
           <Typography variant="body1" sx={{ mr: 2 }}>
-            {user?.username || user?.primaryEmailAddress?.emailAddress}
-            {" "}({role})
+            {name}{" "}({role})
           </Typography>
 
           {/* Clerk Icon + menu */}
@@ -37,7 +36,7 @@ export default function NavBar() {
         {/* Non-signed in: Dispaly Login */}
         <SignedOut>
           <Link
-            href="/sign-in"
+            href="/auth/login"
             style={{
               textDecoration: "none",
               color: "inherit",

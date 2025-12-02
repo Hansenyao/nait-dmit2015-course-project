@@ -49,7 +49,7 @@ namespace CShap.RestApi
                 });
             });
 
-            // Configure JWT authentication
+            // Configure JWT token issuer
             const string authIssueer = "https://mint-cobra-4.clerk.accounts.dev";
             const string authAudience = "dmit2015-jwt";
             ConfigureAuthority(builder, authIssueer, authAudience);
@@ -68,6 +68,9 @@ namespace CShap.RestApi
 
             app.UseAuthorization();
 
+            // Make sure using server's root path can return a message to 
+            // demonstrate server is running!
+            app.MapGet("/", () => "Server is running!");
 
             app.MapControllers();
 

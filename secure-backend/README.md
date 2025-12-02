@@ -156,3 +156,88 @@ In this project, I recommend use option 2 to test rest API
 - You can check response from rest api for each test in Visual Studio window.
 
 - Good Luck!
+
+
+# DMIT2015 Course Project Part 2 - Backend Instruction
+
+- This instruction descripts how does backend application implements user authentication with JWT token.
+
+- The build and test steps are same as part 1.
+
+## Thow to do user authentication 
+
+Backend uses
+
+- Microsoft.AspNetCore.Authentication as the authentication middleware
+- Clerk as the JWT token issuer
+- JWT token will be got in frontend code from Clerk, then it will be added the request header for each request
+- Backend only needs to verify the JWT token from Clerk
+
+In backend code, token issuer and template names are specified by below code.
+
+```
+  const string authIssueer = "https://mint-cobra-4.clerk.accounts.dev";
+  const string authAudience = "dmit2015-jwt";
+```
+
+- On Clerk application dashboard, user name and role are required in template "dmit2015-jwt".
+
+```
+  {
+    "aud": "dmit2015-jwt",
+    "name": "{{user.first_name}}",
+    "role": "{{user.public_metadata.role}}"
+  }
+```
+
+### How you restrict access to endpoints by role
+
+Use Authorize annotation for all REST API, with roles name. For example:
+
+```
+  [HttpPost]
+  [Authorize(Roles = $"{Roles.ActiveStudent}")]
+  public async Task<IActionResult> Create(BillDto dto)
+  {
+      // Set current user to view model
+      dto.CreatedBy = UserName;
+
+      var result = await _billDtoService.CreateAsync(dto);
+      if (!result.Success)
+          return BadRequest(result.Message);
+      return Ok(result.Data);
+  }
+
+```
+
+### How you extract the User Principal Name (UPN) / subject claim from the JWT in endpoint code
+
+Middleware Microsoft.AspNetCore.Authorization provides User object to access current user information, backend uses below code to get user name and role.
+
+```
+  private string UserName => User.Claims.FirstOrDefault(c => c.Type == "name")?.Value ?? "";
+  private string Role => User.FindFirst(ClaimTypes.Role)?.Value ?? "";
+
+```
+
+### How a username/password is authenticated
+
+The authentication process in backend is below:
+
+- Step1: when receive a new request from frontend, middleware Microsoft.AspNetCore.Authorization parses token from request header.
+
+- Step2: middleware Microsoft.AspNetCore.Authorization takes this token to reuqest a verification from Clerk (using the issuer url and JWT template name).
+
+- Step3: f Clerk verify failed, backend returns a 'Unauthorized' status to frontend.
+
+- Step4: otherwise, backend get user name and role from this token.
+
+- Step5: backend maps the request to the corresponding API in controllers.
+
+- Step6: Controllers code will check role and user name for specific business rules.
+
+### How logout or token revocation is implemented
+
+- Backend only needs to get the token from request header and verify them from Clerk
+- Frontend has logout and token revocation operations, frontend calls Clerk apis for logout and token revocation
+- When a token is expired, backend will get the "Unauthorized" status from Clerk and returns the same status to the frontend.

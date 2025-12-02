@@ -24,3 +24,9 @@ Write your assignment discussion here with the status of your assignment, time t
 - For backend, please refer [backend instruction](./cshap-restapi/README.md)
 
 - For frontend, please refer [frontend instruction](./react-restclient/README.md)
+
+## Token flow
+
+For part 2, backend and frontend use Clerk (www.clerk.com) as the JWT token issuer.
+
+![HomePage](./token-flow.png)

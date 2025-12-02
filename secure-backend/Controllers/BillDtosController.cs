@@ -23,7 +23,7 @@ namespace CShap.RestApi.Controllers
         }
 
         [HttpGet]
-        [Authorize]
+        [Authorize(Roles = $"{Roles.ActiveStudent},{Roles.Accounting}")]
         public async Task<IActionResult> GetAll()
         {
             // Accounting return all items
@@ -37,7 +37,7 @@ namespace CShap.RestApi.Controllers
         }
 
         [HttpGet("{id}")]
-        [Authorize(Roles = Roles.ActiveStudent)]
+        [Authorize(Roles = $"{Roles.ActiveStudent}")]
         public async Task<IActionResult> GetById(int id)
         {
             // ActiveStudent can only return personal item
@@ -48,7 +48,7 @@ namespace CShap.RestApi.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = Roles.ActiveStudent)]
+        [Authorize(Roles = $"{Roles.ActiveStudent}")]
         public async Task<IActionResult> Create(BillDto dto)
         {
             // Set current user to view model
@@ -61,7 +61,7 @@ namespace CShap.RestApi.Controllers
         }
 
         [HttpPut("{id}")]
-        [Authorize(Roles = Roles.ActiveStudent)]
+        [Authorize(Roles = $"{Roles.ActiveStudent}")]
         public async Task<IActionResult> Update(int id, BillDto dto)
         {
             if (id != dto.BillID)
@@ -78,7 +78,7 @@ namespace CShap.RestApi.Controllers
         }
 
         [HttpDelete("{id}")]
-        [Authorize(Roles = Roles.ActiveStudent)]
+        [Authorize(Roles = $"{Roles.ActiveStudent}")]
         public async Task<IActionResult> Delete(int id)
         {
             // ActiveStudent can only delete personal items

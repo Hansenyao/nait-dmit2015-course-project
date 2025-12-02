@@ -19,7 +19,10 @@ export default function Home() {
 
             <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", mt: 4, mb: 4 }}>
                 <Box sx={{ width: 400 }}>
-                    <SignIn routing="hash" afterSignInUrl={redirectUrl} />
+                    <SignIn routing="hash"
+                        afterSignInUrl={redirectUrl}
+                        afterSignOutUrl="/"
+                        options={{ rememberDevice: true }} />
                 </Box>
             </Box>
         </div>

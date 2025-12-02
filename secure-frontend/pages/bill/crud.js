@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Button, Box } from "@mui/material";
-import { useUser } from "@clerk/nextjs";
+import { useUser, useAuth } from "@clerk/nextjs";
 import { useRouter } from "next/router";
 import dynamic from "next/dynamic";
 
@@ -18,15 +18,17 @@ export default function Home() {
     const [bills, setBills] = useState([]);
     const [dlgStatus, setDlgStatus] = useState({ selBill: null, open: false });
     const [messageStatus, setMessageStatus] = useState({ message: "", isError: false });
-    const { isSignedIn, user } = useUser();
+    const { isSignedIn, getToken } = useAuth();
     const router = useRouter();
+    const JWT_TEMPLATE = "dmit2015-jwt";
 
     const closeError = () => setMessageStatus({ message: "", isError: false });
 
     // load all bills
-    const loadData = () => {
+    const loadData = async () => {
         try {
-            getBills().then((res) => {
+            const token = await getToken({ template: JWT_TEMPLATE });
+            await getBills(token).then((res) => {
                 setBills(res)
             });
         } catch (e) {
@@ -53,14 +55,15 @@ export default function Home() {
     // save bill for add/edit
     const handleSaveBill = async (bill) => {
         try {
+            const token = await getToken({ template: JWT_TEMPLATE });
             if (bill.billID > 0) {
                 // update
-                await updateBill(bill.billID, bill);
+                await updateBill(bill.billID, bill, token);
                 setBills(bills.map((b) => (b.billID === bill.billID ? bill : b)));
                 setMessageStatus({ message: `Bill (ID: ${bill.billID}) has updated successfully`, isError: false });
             } else {
                 // add a new one
-                var newBill = await createBill(bill);
+                var newBill = await createBill(bill, token);
                 setBills([...bills, newBill]);
                 setMessageStatus({ message: `Bill (ID: ${newBill.billID}) has created successfully`, isError: false });
             }
@@ -72,7 +75,8 @@ export default function Home() {
     // delete a bill
     const handleDelete = async (id) => {
         try {
-            await deleteBill(id);
+            const token = await getToken({ template: JWT_TEMPLATE });
+            await deleteBill(id, token);
             loadData();
             setMessageStatus({ message: `Bill (ID: ${id}) has deleted successfully`, isError: false });
         } catch (e) {

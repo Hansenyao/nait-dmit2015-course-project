@@ -1,93 +1,94 @@
 import { BASE_URL } from './base.js'
 
-export const getBills = async () => {
+export const getBills = async (token) => {
     try {
-        const resp = await fetch(`${BASE_URL}`);
-        if (resp.ok) {
-            return await resp.json();
+        const resp = await fetch(`${BASE_URL}`, {
+            headers: {
+                "Authorization": `Bearer ${token}`,
+            },
+        });
+
+        const text = await resp.text();
+        const data = text ? JSON.parse(text) : null;
+
+        if (!resp.ok) {
+            const errMsg = data?.message || resp.statusText || "Unknown error";
+            throw new Error(errMsg);
         }
 
-        // failed! Get error from JSON or fallback text
-        let err;
-        try {
-            const json = await resp.json();
-            err = json.message || JSON.stringify(json);
-        } catch {
-            err = await resp.text();
-        }
-        throw new Error(err);
+        return data;
     } catch (e) {
         console.error("Get bills failed:", e.message);
         throw e;
     }
 }
 
-export const getBill = async (id) => {
+export const getBill = async (id, token) => {
     try {
-        const resp = await fetch(`${BASE_URL}/${id}/`);
-        if (resp.ok) {
-            return await resp.json();
+        const resp = await fetch(`${BASE_URL}/${id}/`, {
+            headers: {
+                "Authorization": `Bearer ${token}`,
+            },
+        });
+
+        const text = await resp.text();
+        const data = text ? JSON.parse(text) : null;
+
+        if (!resp.ok) {
+            const errMsg = data?.message || resp.statusText || "Unknown error";
+            throw new Error(errMsg);
         }
 
-        // failed! Get error from JSON or fallback text
-        let err;
-        try {
-            const json = await resp.json();
-            err = json.message || JSON.stringify(json);
-        } catch {
-            err = await resp.text();
-        }
-        throw new Error(err);
+        return data;
     } catch (e) {
         console.error("Get bill failed:", e.message);
         throw e;
     }
 }
 
-export const createBill = async (bill) => {
+export const createBill = async (bill, token) => {
     try {
         const resp = await fetch(`${BASE_URL}`, {
             method: "POST",
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+                'Content-Type': 'application/json',
+                "Authorization": `Bearer ${token}`,
+            },
             body: JSON.stringify(bill)
         });
-        if (resp.ok) {
-            return await resp.json();
+
+        const text = await resp.text();
+        const data = text ? JSON.parse(text) : null;
+
+        if (!resp.ok) {
+            const errMsg = data?.message || resp.statusText || "Unknown error";
+            throw new Error(errMsg);
         }
 
-        // failed! Get error from JSON or fallback text
-        let err;
-        try {
-            const json = await resp.json();
-            err = json.message || JSON.stringify(json);
-        } catch {
-            err = await resp.text();
-        }
-        throw new Error(err);
+        return data;
     } catch (e) {
         console.error("Create bill failed:", e.message);
         throw e;
     }
 }
 
-export const updateBill = async (id, bill) => {
+export const updateBill = async (id, bill, token) => {
     try {
         const resp = await fetch(`${BASE_URL}/${id}`, {
             method: "PUT",
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+                'Content-Type': 'application/json',
+                "Authorization": `Bearer ${token}`,
+            },
             body: JSON.stringify(bill)
         });
 
-        // failed! Get error from JSON or fallback text
-        let err;
+        const text = await resp.text();
+        const data = text ? JSON.parse(text) : null;
+
         if (!resp.ok) {
-            try {
-                const json = await resp.json();
-                err = json.message || JSON.stringify(json);
-            } catch {
-                err = await resp.text();
-            }
-            throw new Error(err);
+            const errMsg = data?.message || resp.statusText || "Unknown error";
+            throw new Error(errMsg);
         }
     } catch (e) {
         console.error("Update bill failed:", e.message);
@@ -95,23 +96,21 @@ export const updateBill = async (id, bill) => {
     }
 }
 
-export const deleteBill = async (id) => {
+export const deleteBill = async (id, token) => {
     try {
         const resp = await fetch(`${BASE_URL}/${id}`, {
             method: "DELETE",
-            headers: { 'Content-Type': 'application/json' }
+            headers: {
+                "Authorization": `Bearer ${token}`,
+            },
         })
 
-        // failed! Get error from JSON or fallback text
-        let err;
+        const text = await resp.text();
+        const data = text ? JSON.parse(text) : null;
+
         if (!resp.ok) {
-            try {
-                const json = await resp.json();
-                err = json.message || JSON.stringify(json);
-            } catch {
-                err = await resp.text();
-            }
-            throw new Error(err);
+            const errMsg = data?.message || resp.statusText || "Unknown error";
+            throw new Error(errMsg);
         }
     } catch (e) {
         console.error("Delete bill failed:", e.message);

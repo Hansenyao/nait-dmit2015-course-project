@@ -89,7 +89,7 @@ export default function Home() {
             <Header />
             <NavBar />
             <Box sx={{ flexGrow: 1, ml: 3, mt: 2 }}>
-                <h1>DMIT2015 - Course Project | CRUD</h1>
+                <h1>Bill Management | CRUD</h1>
             </Box>
             <Box sx={{ padding: 3 }}>
                 <ErrorBanner message={messageStatus.message} isError={messageStatus.isError} onClose={closeError} />

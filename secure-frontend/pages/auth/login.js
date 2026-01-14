@@ -14,7 +14,7 @@ export default function Home() {
             <Header />
             <NavBar />
             <Box sx={{ flexGrow: 1, ml: 3, mt: 2 }}>
-                <h1>DMIT2015 - Course Project | Login</h1>
+                <h1>Bill Management | Login</h1>
             </Box>
 
             <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center", mt: 4, mb: 4 }}>

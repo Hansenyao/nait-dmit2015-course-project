@@ -30,7 +30,7 @@ export default function Home() {
         <Stack spacing={2} sx={{ mt: 2 }}>
           <h2>Introduce:</h2>
           <Typography>This is a Full Stack Development project Demo demonstrated how does Database CRUD work, with user authentication and role based authorization.</Typography>
-          <Typography>This project uses bellow technoloy stacks:</Typography>
+          <Typography>This project uses below technoloy stacks:</Typography>
           <table
             style={{
               width: "600px",
@@ -63,7 +63,7 @@ export default function Home() {
           </table>
 
           <h2>How To Use:</h2>
-          <Typography>Bellow roles and accounts are provided for demonstration, please use different roles account to login and do CURD operations.</Typography>
+          <Typography>Below roles and accounts are provided for demonstration, please use different roles account to login and do CURD operations.</Typography>
           <table
             style={{
               width: "800px",
